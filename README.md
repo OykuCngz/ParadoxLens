@@ -12,6 +12,8 @@
 
 ## 📽️ The Core Mechanic: Perspective Realization
 
+![Paradox Lens Gameplay](https://raw.githubusercontent.com/OykuCngz/ParadoxLens/main/Documentation/gameplay_placeholder.gif)
+
 The game allows players to capture 3D objects as 2D snapshots and project them back into the world. The object's scale is dynamically calculated to maintain its perceived size, breaking the laws of Euclidean geometry.
 
 ### 📐 The Mathematics of Perspective
