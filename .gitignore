@@ -1,11 +1,16 @@
-[Library]
-[Temp]
-[Obj]
-[Build]
-[Builds]
-[Logs]
-[MemoryCaptures]
-[UserSettings]
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+MemoryCaptures/
+UserSettings/
+ProjectSettings/
+Packages/
+/ignore/
+/Assets/AssetStoreTools*
+
 
 # Asset meta files must be tracked
 !/[Assets]/**/*.meta
