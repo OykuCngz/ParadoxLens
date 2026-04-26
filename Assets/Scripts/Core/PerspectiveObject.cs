@@ -83,13 +83,13 @@ public class PerspectiveObject : MonoBehaviour
 
     /// <summary>
     /// Finalizes placement, restores visuals, and re-aligns gravity.
+    /// Now accepts initial velocity for momentum transfer.
     /// </summary>
-    public void OnRelease(Vector3 newGravityDirection)
+    public void OnRelease(Vector3 newGravityDirection, Vector3 initialVelocity)
     {
         _isPickedUp = false;
-        transform.localScale = _targetScale; // Snap to final scale
+        transform.localScale = _targetScale; 
 
-        // Restore original material
         if (_renderer != null && _originalMaterial != null)
         {
             _renderer.material = _originalMaterial;
@@ -99,11 +99,31 @@ public class PerspectiveObject : MonoBehaviour
         {
             _rb.isKinematic = false;
             
+            // APPLY MOMENTUM
+            _rb.linearVelocity = initialVelocity;
+
             GravityBody gBody = GetComponent<GravityBody>();
             if (gBody != null)
             {
                 gBody.GravityDirection = newGravityDirection;
             }
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Only trigger impact feedback if we were dropped or moving fast
+        if (_rb != null && _rb.linearVelocity.magnitude > 2.0f)
+        {
+            PlayImpactEffect(collision);
+        }
+    }
+
+    private void PlayImpactEffect(Collision collision)
+    {
+        // Professional portfolios should have hooks for VFX/SFX
+        Debug.Log($"[Impact] {gameObject.name} hit {collision.gameObject.name} with velocity {_rb.linearVelocity.magnitude}");
+        
+        // FUTURE: Add ScreenShake or Particle spawn here
     }
 }

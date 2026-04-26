@@ -13,17 +13,25 @@ public class PerspectiveController : MonoBehaviour
     [Header("References")]
     public Transform holdParent; // Child of camera where objects are visually held
 
+    [Header("Physics & Juice")]
+    [SerializeField] private float _throwForce = 2.0f;
+    [SerializeField] private float _velocitySmoothTime = 0.1f;
+
     private PerspectiveObject _currentObject;
     private Camera _cam;
+    private Vector3 _lastCamPos;
+    private Vector3 _camVelocity;
 
     void Start()
     {
         _cam = GetComponent<Camera>();
+        _lastCamPos = transform.position;
     }
 
     void Update()
     {
-        // Simple Input Logic (LMB to toggle pick/drop)
+        CalculateCameraVelocity();
+
         if (Input.GetMouseButtonDown(0))
         {
             if (_currentObject == null)
@@ -40,6 +48,14 @@ public class PerspectiveController : MonoBehaviour
         {
             UpdateObjectPlacement();
         }
+    }
+
+    private void CalculateCameraVelocity()
+    {
+        // Simple velocity tracking for momentum transfer
+        Vector3 instantVelocity = (transform.position - _lastCamPos) / Time.deltaTime;
+        _camVelocity = Vector3.Lerp(_camVelocity, instantVelocity, Time.deltaTime / _velocitySmoothTime);
+        _lastCamPos = transform.position;
     }
 
     private void TryPickUp()
@@ -59,27 +75,26 @@ public class PerspectiveController : MonoBehaviour
 
     private void UpdateObjectPlacement()
     {
-        // 1. Calculate how far we can move the object before hitting something
         Ray ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         float targetDistance = maxPickUpDistance;
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxPickUpDistance, placementMask))
         {
-            // Subtract a small buffer based on object bounds (simplified here)
             targetDistance = hit.distance;
         }
 
-        // 2. Adjust object position to that distance
         _currentObject.transform.position = ray.GetPoint(targetDistance);
-
-        // 3. Trigger the "Paradox Math" scaling
         _currentObject.UpdatePerspectiveScale(targetDistance);
     }
 
     private void DropObject()
     {
         _currentObject.transform.SetParent(null);
-        _currentObject.OnRelease(transform.forward); // Re-orient gravity to where we were looking
+        
+        // Calculate the combined release velocity (Camera movement + Forward momentum)
+        Vector3 releaseVelocity = _camVelocity + (transform.forward * _throwForce);
+        
+        _currentObject.OnRelease(transform.forward, releaseVelocity); 
         _currentObject = null;
     }
 }
