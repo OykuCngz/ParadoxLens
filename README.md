@@ -12,6 +12,7 @@
 
 ### 🔭 Recursive Perspective Scaling
 ![Perspective Demo](Documentation/GIFs/perspective_demo.gif)
+
 A robust implementation of dynamic object scaling based on the observer's frustum. Unlike standard scaling, this engine maintains the *perceived volume* of an object through real-time distance-ratio calculations.
 - **Mathematical Model:** $S = S_0 \cdot (D/D_0)$ where $S$ is the scale factor and $D$ is the viewport depth.
 - **Constraint Solver:** Features a dynamic collision buffer to prevent geometry clipping during rapid scale transitions.
