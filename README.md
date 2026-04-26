@@ -8,9 +8,9 @@
 
 ---
 
-## 💎 Core Technical Pillars
+##  Core Technical Pillars
 
-### 🔭 Recursive Perspective Scaling
+###  Recursive Perspective Scaling
 ![Perspective Demo](Documentation/GIFs/perspective_demo.gif)
 
 A robust implementation of dynamic object scaling based on the observer's frustum. Unlike standard scaling, this engine maintains the *perceived volume* of an object through real-time distance-ratio calculations.
@@ -22,14 +22,14 @@ A high-fidelity snapshot system that captures environmental state into a localiz
 - **Dynamic Render Projection:** Captures a high-resolution sub-frustum into a unique `RenderTexture` and physicalizes it via an instant object factory.
 - **Kinematic Transfer:** Implements momentum-aware release logic, allowing for natural projectile physics and interaction fluidness.
 
-### 🌓 Advanced Rendering (Stencil & HLSL)
+###  Advanced Rendering (Stencil & HLSL)
 Custom-built shaders developed to break standard lighting conventions and create spatial paradoxes.
 - **Scanline Spatial Tracker:** A world-space HLSL shader that visualizes spatial manipulation through procedural noise and scanline patterns.
 - **Stencil-Based Windows:** Implementation of portal logic using stencil buffers for non-Euclidean environmental transitions.
 
 ---
 
-## 🛠 Engineering Architecture
+##  Engineering Architecture
 
 - **Smooth State Interpolation:** All mechanical transitions (scaling, camera FOV, UI flash) are managed via high-performance interpolation algorithms for a "AAA" game feel.
 - **Gravity Bridge:** A custom physics module that decouples gravity vectors from the global environment, enabling per-object directional gravity.
@@ -37,7 +37,7 @@ Custom-built shaders developed to break standard lighting conventions and create
 
 ---
 
-## 📦 Technical Specifications
+##  Technical Specifications
 
 - **Unity Version:** 6 (6000.0.2f1)
 - **Render Pipeline:** Built-in / URP Compatible
