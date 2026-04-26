@@ -17,7 +17,6 @@ public class FirstPersonController : MonoBehaviour
 
     [Header("Look Settings")]
     [SerializeField] private float _mouseSensitivity = 1.5f;
-    [SerializeField] private float _smoothLookTime = 0.05f;
     [SerializeField] private Transform _playerCamera;
     [SerializeField] private float _maxLookAngle = 89f;
 

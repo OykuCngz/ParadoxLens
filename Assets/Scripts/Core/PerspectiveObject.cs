@@ -2,25 +2,37 @@ using UnityEngine;
 
 /// <summary>
 /// Core logic for an object that can be manipulated via perspective.
-/// Enhanced with smoothing for a professional 'AAA' feel.
+/// Combined with 'Paradox Effect' shader support and smooth interpolation.
 /// </summary>
 public class PerspectiveObject : MonoBehaviour
 {
+    [Header("Visual Settings")]
     [SerializeField] private float _smoothingSpeed = 15f;
+    [SerializeField] private Material _paradoxMaterial;
     
+    // Physics & Rendering
     private Rigidbody _rb;
+    private MeshRenderer _renderer;
+    private Material _originalMaterial;
+
+    // Perspective State
     private float _initialDistance;
     private Vector3 _initialScale;
-    private bool _isPickedUp;
-    
     private Vector3 _targetScale;
-    private Vector3 _targetPosition;
+    private bool _isPickedUp;
 
     public bool IsPickedUp => _isPickedUp;
 
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _renderer = GetComponent<MeshRenderer>();
+        
+        if (_renderer != null)
+        {
+            _originalMaterial = _renderer.material;
+        }
+
         _targetScale = transform.localScale;
     }
 
@@ -28,13 +40,14 @@ public class PerspectiveObject : MonoBehaviour
     {
         if (_isPickedUp)
         {
-            // Smoothly interpolate to target scale and position
+            // Smoothly interpolate to target scale
             transform.localScale = Vector3.Lerp(transform.localScale, _targetScale, Time.deltaTime * _smoothingSpeed);
         }
     }
 
     /// <summary>
-    /// Records initial state when picked up by the camera.
+    /// Records initial state when picked up.
+    /// Toggles the Paradox Shader for visual feedback.
     /// </summary>
     public void OnPickup(float distance)
     {
@@ -42,6 +55,12 @@ public class PerspectiveObject : MonoBehaviour
         _initialDistance = distance;
         _initialScale = transform.localScale;
         _targetScale = _initialScale;
+
+        // Apply visual effect
+        if (_renderer != null && _paradoxMaterial != null)
+        {
+            _renderer.material = _paradoxMaterial;
+        }
         
         if (_rb != null)
         {
@@ -51,23 +70,30 @@ public class PerspectiveObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates target scale based on new distance.
+    /// Updates target scale based on new distance to maintain perceived size.
     /// </summary>
     public void UpdatePerspectiveScale(float currentDistance)
     {
         if (!_isPickedUp) return;
 
+        // The Paradox Formula: Scale = Distance Ratio
         float scaleMultiplier = currentDistance / _initialDistance;
         _targetScale = _initialScale * scaleMultiplier;
     }
 
     /// <summary>
-    /// Finalizes placement and re-aligns gravity.
+    /// Finalizes placement, restores visuals, and re-aligns gravity.
     /// </summary>
     public void OnRelease(Vector3 newGravityDirection)
     {
         _isPickedUp = false;
-        transform.localScale = _targetScale; // Snap to final scale on release
+        transform.localScale = _targetScale; // Snap to final scale
+
+        // Restore original material
+        if (_renderer != null && _originalMaterial != null)
+        {
+            _renderer.material = _originalMaterial;
+        }
 
         if (_rb != null)
         {
