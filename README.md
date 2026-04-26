@@ -17,13 +17,11 @@ A robust implementation of dynamic object scaling based on the observer's frustu
 - **Constraint Solver:** Features a dynamic collision buffer to prevent geometry clipping during rapid scale transitions.
 
 ### 📸 Viewfinder Capture & Realization
-![Snapshot Demo](Documentation/GIFs/snapshot_demo.gif)
 A high-fidelity snapshot system that captures environmental state into a localized reality.
 - **Dynamic Render Projection:** Captures a high-resolution sub-frustum into a unique `RenderTexture` and physicalizes it via an instant object factory.
 - **Kinematic Transfer:** Implements momentum-aware release logic, allowing for natural projectile physics and interaction fluidness.
 
 ### 🌓 Advanced Rendering (Stencil & HLSL)
-![Shader Demo](Documentation/GIFs/shader_demo.gif)
 Custom-built shaders developed to break standard lighting conventions and create spatial paradoxes.
 - **Scanline Spatial Tracker:** A world-space HLSL shader that visualizes spatial manipulation through procedural noise and scanline patterns.
 - **Stencil-Based Windows:** Implementation of portal logic using stencil buffers for non-Euclidean environmental transitions.
