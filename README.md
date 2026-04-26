@@ -47,4 +47,4 @@ This project serves as a concrete proof of skill in:
 
 ---
 
-*Developed by [OykuCngz](https://github.com/OykuCngz) - Aiming for excellence in the European Game Development Industry.*
+*Developed by [OykuCngz](https://github.com/OykuCngz) 
