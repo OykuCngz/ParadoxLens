@@ -2,20 +2,35 @@ using UnityEngine;
 
 /// <summary>
 /// Core logic for an object that can be manipulated via perspective.
-/// Displays the "Hard Math" components requested for the Polish internship portfolio.
+/// Enhanced with smoothing for a professional 'AAA' feel.
 /// </summary>
 public class PerspectiveObject : MonoBehaviour
 {
+    [SerializeField] private float _smoothingSpeed = 15f;
+    
     private Rigidbody _rb;
     private float _initialDistance;
     private Vector3 _initialScale;
     private bool _isPickedUp;
+    
+    private Vector3 _targetScale;
+    private Vector3 _targetPosition;
 
     public bool IsPickedUp => _isPickedUp;
 
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _targetScale = transform.localScale;
+    }
+
+    void Update()
+    {
+        if (_isPickedUp)
+        {
+            // Smoothly interpolate to target scale and position
+            transform.localScale = Vector3.Lerp(transform.localScale, _targetScale, Time.deltaTime * _smoothingSpeed);
+        }
     }
 
     /// <summary>
@@ -26,8 +41,8 @@ public class PerspectiveObject : MonoBehaviour
         _isPickedUp = true;
         _initialDistance = distance;
         _initialScale = transform.localScale;
+        _targetScale = _initialScale;
         
-        // Disable physics while holding
         if (_rb != null)
         {
             _rb.isKinematic = true;
@@ -36,15 +51,14 @@ public class PerspectiveObject : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates scale based on new distance to maintain perceived size.
-    /// Formula: NewScale = InitialScale * (NewDistance / InitialDistance)
+    /// Updates target scale based on new distance.
     /// </summary>
     public void UpdatePerspectiveScale(float currentDistance)
     {
         if (!_isPickedUp) return;
 
         float scaleMultiplier = currentDistance / _initialDistance;
-        transform.localScale = _initialScale * scaleMultiplier;
+        _targetScale = _initialScale * scaleMultiplier;
     }
 
     /// <summary>
@@ -53,12 +67,12 @@ public class PerspectiveObject : MonoBehaviour
     public void OnRelease(Vector3 newGravityDirection)
     {
         _isPickedUp = false;
+        transform.localScale = _targetScale; // Snap to final scale on release
 
         if (_rb != null)
         {
             _rb.isKinematic = false;
             
-            // Integrate with the custom gravity system
             GravityBody gBody = GetComponent<GravityBody>();
             if (gBody != null)
             {
